@@ -17,8 +17,9 @@ export const startLoginLocal = () => {
 };
 
 export const startLogin = () => {
-  // Em desenvolvimento, usar bypass local
-  if (import.meta.env.DEV) {
+  // Em desenvolvimento ou se bypass estiver habilitado, usar bypass local
+  const allowBypass = import.meta.env.DEV || import.meta.env.VITE_ALLOW_OAUTH_BYPASS === "true";
+  if (allowBypass) {
     startLoginLocal();
     return;
   }

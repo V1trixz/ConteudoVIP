@@ -11,8 +11,9 @@ function getQueryParam(req: Request, key: string): string | undefined {
 }
 
 export function registerOAuthRoutes(app: Express) {
-  // Bypass de login para ambiente local (desenvolvimento)
-  if (process.env.NODE_ENV === "development") {
+  // Bypass de login para ambiente local (desenvolvimento) ou se configurado em produção
+  const allowBypass = process.env.NODE_ENV === "development" || process.env.ALLOW_OAUTH_BYPASS === "true";
+  if (allowBypass) {
     app.get("/api/oauth/bypass", async (req: Request, res: Response) => {
       const ownerOpenId = process.env.OWNER_OPEN_ID || "local-admin";
       const ownerName = process.env.OWNER_NAME || "Administrador Local";
@@ -32,7 +33,7 @@ export function registerOAuthRoutes(app: Express) {
       });
 
       const cookieOptions = getSessionCookieOptions(req);
-      res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS, secure: false });
+      res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
       res.redirect(302, "/");
     });

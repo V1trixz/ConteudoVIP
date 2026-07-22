@@ -65,13 +65,21 @@ async function startServer() {
   server.listen(port, async () => {
     console.log(`Server running on http://localhost:${port}/`);
     
-    // Configurar webhook do Telegram se estivermos em desenvolvimento local
-    if (process.env.NODE_ENV === "development" && process.env.TELEGRAM_BOT_TOKEN) {
+    // Configurar webhook do Telegram
+    if (process.env.TELEGRAM_BOT_TOKEN) {
       try {
-        await setTelegramWebhook(`http://localhost:${port}/api/telegram/webhook`);
-        console.log("[Telegram] Webhook configurado com sucesso");
+        let webhookUrl: string;
+        if (process.env.NODE_ENV === "development") {
+          webhookUrl = `http://localhost:${port}/api/webhooks/telegram`;
+        } else if (process.env.APP_PUBLIC_BASE_URL) {
+          webhookUrl = new URL("/api/webhooks/telegram", process.env.APP_PUBLIC_BASE_URL).toString();
+        } else {
+          throw new Error("APP_PUBLIC_BASE_URL nao esta configurada em producao");
+        }
+        await setTelegramWebhook(webhookUrl);
+        console.log(`[Telegram] Webhook configurado com sucesso: ${webhookUrl}`);
       } catch (err: any) {
-        console.warn("[Telegram] Falha ao configurar webhook local:", err.message);
+        console.warn("[Telegram] Falha ao configurar webhook:", err.message);
       }
     }
   });
