@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1784674363287,
+      "tag": "0000_concerned_captain_flint",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1784676398031,
+      "tag": "0001_woozy_celestials",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1784677509506,
+      "tag": "0002_remarkable_lockjaw",
+      "breakpoints": true
+    }
+  ]
+}

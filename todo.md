@@ -1,0 +1,24 @@
+# Project TODO
+
+- [x] Documentar a arquitetura do sistema, os pré-requisitos de produção e as variáveis de ambiente necessárias.
+- [x] Implementar consentimento explícito de maioridade antes de apresentar planos ou permitir qualquer compra.
+- [x] Implementar a experiência `/start` do bot com descrição do grupo, aviso de conteúdo adulto, prévia configurável e botão de compra.
+- [x] Implementar catálogo configurável de planos de assinatura com preço, duração e disponibilidade.
+- [x] Persistir perfis do Telegram, confirmações de maioridade, assinaturas, pagamentos, convites, eventos de acesso e logs de automação.
+- [x] Integrar a criação de cobrança PIX da EvoPay, incluindo QR Code, código copia e cola, expiração e estado de pagamento.
+- [x] Implementar endpoint de webhook da EvoPay com validação de assinatura, idempotência, auditoria e tratamento de tentativas repetidas.
+- [x] Implementar confirmação de pagamento, ativação de assinatura e geração de convite único, limitado no uso e com expiração.
+- [x] Implementar envio seguro do convite único ao assinante pelo bot do Telegram.
+- [x] Implementar renovação de assinaturas com preservação de histórico e prevenção de duplicidade de acesso.
+- [x] Implementar tarefas recorrentes para aviso três dias antes do vencimento, expiração de acesso e remoção automática do grupo.
+- [x] Implementar painel administrativo com indicadores, assinantes, assinaturas, pagamentos, acessos, planos e logs operacionais.
+- [x] Implementar proteção de rotas administrativas, controle de papéis e mascaramento de dados sensíveis.
+- [x] Implementar testes unitários dos cálculos de validade, idempotência de webhooks, controle de convite e regras de acesso.
+- [x] Criar documentação de configuração do bot, EvoPay, webhook, grupo VIP, banco de dados e operação em produção.
+- [x] Executar verificações de tipo, testes automatizados e inspeção visual do painel.
+- [x] Gerar arquivo ZIP contendo o projeto completo e a documentação final.
+- [x] Tornar a prévia do `/start` configurável por texto e imagem, com persistência e edição administrativa.
+- [x] Completar e comprovar a edição administrativa de planos, incluindo preço, duração e disponibilidade.
+- [x] Persistir e apresentar a validade da cobrança PIX gerada pela EvoPay no bot e no painel.
+- [x] Cobrir o endpoint de webhook da EvoPay com testes de autenticação, auditoria e reprocessamento idempotente.
+- [x] Comprovar no código a proteção administrativa por função e o mascaramento de dados sensíveis no painel.
