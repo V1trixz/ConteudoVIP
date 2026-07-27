@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPixChargeExpiry, isCompletedDepositForPayment, type EvoPayPixCharge } from "./evopay";
+import { getPixChargeExpiry, isCompletedDepositForPayment, type LofyPayPixCharge } from "./lofypay";
 
 const payment = {
   providerTransactionId: "pix_123",
@@ -7,7 +7,7 @@ const payment = {
   amountCents: 2990,
 };
 
-const completedCharge: EvoPayPixCharge = {
+const completedCharge: LofyPayPixCharge = {
   id: "pix_123",
   type: "DEPOSIT",
   status: "COMPLETED",
@@ -29,12 +29,12 @@ describe("isCompletedDepositForPayment", () => {
 });
 
 describe("getPixChargeExpiry", () => {
-  it("normaliza a data de expiração informada pela EvoPay", () => {
+  it("normaliza a data de expiração informada pela LofyPay", () => {
     const result = getPixChargeExpiry({ ...completedCharge, expiresAt: "2026-08-20T12:30:00.000Z" });
     expect(result?.toISOString()).toBe("2026-08-20T12:30:00.000Z");
   });
 
-  it("retorna nulo quando a EvoPay não informa validade da cobrança", () => {
+  it("retorna nulo quando a LofyPay não informa validade da cobrança", () => {
     expect(getPixChargeExpiry(completedCharge)).toBeNull();
   });
 });

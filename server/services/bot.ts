@@ -1,6 +1,6 @@
 import * as db from "../db";
 import { ENV } from "../_core/env";
-import { createPixCharge, getPixCharge, getPixChargeExpiry, isCompletedDepositForPayment } from "./evopay";
+import { createPixCharge, getPixCharge, getPixChargeExpiry, isCompletedDepositForPayment } from "./lofypay";
 import { createOpaqueToken, hashSecret, serializeSafe } from "./ids";
 import { fulfillCompletedPayment } from "./subscriptions";
 import { answerCallbackQuery, sendMessage, sendPhoto, type TelegramProfile, type TelegramUpdate } from "./telegram";
@@ -115,7 +115,7 @@ async function createPaymentForPlan(telegramUserId: string, planId: string) {
   if (!payment) throw new Error("Não foi possível criar o pedido de pagamento.");
 
   try {
-    const callbackUrl = new URL("/api/webhooks/evopay", ENV.appPublicBaseUrl);
+    const callbackUrl = new URL("/api/webhooks/lofypay", ENV.appPublicBaseUrl);
     callbackUrl.searchParams.set("payment_id", payment.id);
     callbackUrl.searchParams.set("token", callbackToken);
     const charge = await createPixCharge({

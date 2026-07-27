@@ -1,17 +1,17 @@
 # VIP Access Manager
 
-Plataforma full-stack para vender e administrar assinaturas de acesso a um grupo VIP no Telegram. O projeto combina um bot do Telegram, cobrança PIX pela **EvoPay**, automação de acesso e um painel administrativo web protegido.
+Plataforma full-stack para vender e administrar assinaturas de acesso a um grupo VIP no Telegram. O projeto combina um bot do Telegram, cobrança PIX pela **LofyPay**, automação de acesso e um painel administrativo web protegido.
 
-> **Uso responsável:** o fluxo foi estruturado para conteúdo permitido exclusivamente a pessoas com 18 anos ou mais. A operação deve respeitar a legislação aplicável, as políticas do Telegram, da EvoPay e os termos do provedor de hospedagem.
+> **Uso responsável:** o fluxo foi estruturado para conteúdo permitido exclusivamente a pessoas com 18 anos ou mais. A operação deve respeitar a legislação aplicável, as políticas do Telegram, da LofyPay e os termos do provedor de hospedagem.
 
 ## O que foi implementado
 
 | Área | Recursos |
 |---|---|
 | Bot do Telegram | `/start` com descrição, prévia textual, consentimento de maioridade e botão de assinatura; consulta de planos; status da assinatura; conferência manual de PIX. |
-| Cobrança PIX | Geração de cobrança exclusiva por plano; QR/copia e cola enviados pelo bot; validação independente da transação com a EvoPay. |
+| Cobrança PIX | Geração de cobrança exclusiva por plano; QR/copia e cola enviados pelo bot; validação independente da transação com a LofyPay. |
 | Acesso VIP | Convite individual de uso único, com validade de 24 horas; revogação de convite; remoção do grupo no vencimento; preservação do acesso quando existir outra assinatura ativa. |
-| Automação | Webhook da EvoPay; webhook do Telegram com segredo; aviso de renovação a três dias do vencimento; rotina horária de expiração. |
+| Automação | Webhook da LofyPay; webhook do Telegram com segredo; aviso de renovação a três dias do vencimento; rotina horária de expiração. |
 | Administração | Visão geral, assinantes, pagamentos, planos editáveis, logs operacionais, webhook e controle de tarefas recorrentes. |
 | Segurança | Consentimento +18 gravado; proteção de administrador; callbacks com token individual; validação de valor, referência, tipo e status de PIX; processamento idempotente. |
 
@@ -22,7 +22,7 @@ flowchart LR
   U[Assinante] -->|/start e botões| T[Bot Telegram]
   T -->|HTTPS webhook| A[Aplicação VIP Access]
   A --> D[(Banco de dados)]
-  A -->|Criar/consultar PIX| E[EvoPay]
+  A -->|Criar/consultar PIX| E[LofyPay]
   E -->|Callback de confirmação| A
   A -->|Convite único / remoção| G[Grupo VIP Telegram]
   H[Tarefa horária] -->|lembretes e vencimentos| A
@@ -43,13 +43,13 @@ Crie o bot por meio do **BotFather**, guarde o token com segurança e adicione o
 
 Após publicar o projeto, acesse **Operação → Configurar webhook** no painel. Esse procedimento registra a URL pública `/api/webhooks/telegram` no Telegram de forma segura.
 
-### 2. EvoPay
+### 2. LofyPay
 
-Configure a chave de API da EvoPay. A aplicação gera uma URL de callback exclusiva para cada cobrança PIX, contendo um token de uso interno. O callback não é considerado suficiente por si só: a aplicação consulta a transação na EvoPay e só concede o acesso quando valor, referência, identificador, tipo `DEPOSIT` e status `COMPLETED` forem confirmados.
+Configure a chave de API da LofyPay. A aplicação gera uma URL de callback exclusiva para cada cobrança PIX, contendo um token de uso interno. O callback não é considerado suficiente por si só: a aplicação consulta a transação na LofyPay e só concede o acesso quando valor, referência, identificador, tipo `DEPOSIT` e status `COMPLETED` forem confirmados.
 
 | Variável | Finalidade |
 |---|---|
-| `EVOPAY_API_KEY` | Chave privada da API da EvoPay. |
+| `LOFYPAY_API_KEY` | Chave privada da API da LofyPay. |
 
 ### 3. Painel e automações
 
@@ -97,7 +97,7 @@ O texto de apresentação e a prévia são definidos em `server/services/bot.ts`
 
 ## Observações operacionais
 
-* Nunca exponha tokens de bot, chaves da EvoPay, QR codes ou links de convite em páginas públicas.
+* Nunca exponha tokens de bot, chaves da LofyPay, QR codes ou links de convite em páginas públicas.
 * O convite é limitado a uma entrada e tem validade de 24 horas; um reenvio revoga o convite anterior.
 * A remoção do grupo só ocorre se não houver outra assinatura ativa válida para o mesmo usuário.
 * Os registros de auditoria permitem analisar falhas de callback, envio de convite, expiração e ações administrativas.

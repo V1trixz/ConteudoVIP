@@ -23,7 +23,7 @@ vi.mock("../db", () => ({
   recordAutomationRun: vi.fn(),
 }));
 
-vi.mock("./evopay", () => ({ getPixCharge: vi.fn(), isCompletedDepositForPayment: vi.fn() }));
+vi.mock("./lofypay", () => ({ getPixCharge: vi.fn(), isCompletedDepositForPayment: vi.fn() }));
 vi.mock("./telegram", () => ({
   createSingleUseInviteLink: vi.fn(),
   revokeInviteLink: vi.fn(),
