@@ -9,7 +9,7 @@ export const ENV = {
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   appPublicBaseUrl: (process.env.APP_PUBLIC_BASE_URL ?? "").replace(/\/$/, ""),
   lofyPayApiKey: process.env.LOFYPAY_API_KEY ?? "",
-  lofyPayApiBaseUrl: "https://api.lofypay.com",
+  lofyPayApiBaseUrl: "https://app.lofypay.com",
   telegramBotToken: process.env.TELEGRAM_BOT_TOKEN ?? "",
   telegramGroupChatId: process.env.TELEGRAM_GROUP_CHAT_ID ?? "",
   telegramWebhookSecret: process.env.TELEGRAM_WEBHOOK_SECRET ?? "",
