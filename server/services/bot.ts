@@ -95,6 +95,7 @@ async function sendSubscriptionStatus(telegramUserId: string) {
 }
 
 async function createPaymentForPlan(telegramUserId: string, planId: string) {
+  console.log("createPaymentForPlan start", { telegramUserId, planId });
   const [telegramUser, plan] = await Promise.all([
     db.getTelegramUserByTelegramId(telegramUserId),
     db.getPlanById(planId),
@@ -118,11 +119,13 @@ async function createPaymentForPlan(telegramUserId: string, planId: string) {
     const callbackUrl = new URL("/api/webhooks/lofypay", ENV.appPublicBaseUrl);
     callbackUrl.searchParams.set("payment_id", payment.id);
     callbackUrl.searchParams.set("token", callbackToken);
+    console.log("creating PIX charge", { paymentId: payment.id, amountCents: plan.priceCents, callbackUrl: callbackUrl.toString() });
     const charge = await createPixCharge({
       amountCents: plan.priceCents,
       externalReference,
       callbackUrl: callbackUrl.toString(),
     });
+    console.log("pix charge response", { paymentId: payment.id, charge: charge && { id: (charge as any).id, qrCodeText: (charge as any).qrCodeText ? 'present' : 'missing', qrCodeUrl: (charge as any).qrCodeUrl ? 'present' : 'missing' } });
     await db.attachProviderCharge(payment.id, {
       providerTransactionId: charge.id,
       pixCopyPaste: charge.qrCodeText ?? null,
@@ -208,9 +211,11 @@ async function processMessage(profile: TelegramProfile, chatId: number, text: st
 }
 
 async function processCallback(profile: TelegramProfile, chatId: number, data: string, callbackId: string) {
+  console.log("callback received", { from: profile.id, data, callbackId });
   const telegramUser = await db.upsertTelegramUser(profile);
   if (!telegramUser) throw new Error("Não foi possível registrar o usuário do Telegram.");
   await answerCallbackQuery(callbackId);
+  console.log("callback acknowledged", { userId: telegramUser.id, telegramUserId: telegramUser.telegramUserId, data });
 
   if (data === "age_confirm") {
     const confirmed = await db.confirmTelegramAge(telegramUser.telegramUserId);
