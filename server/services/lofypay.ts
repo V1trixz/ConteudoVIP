@@ -55,9 +55,12 @@ async function lofyPayFetch<T>(path: string, init: RequestInit): Promise<T> {
     try {
       body = JSON.parse(raw) as LofyPayErrorResponse;
     } catch {
-      // Preserve the provider response as diagnostic context without leaking credentials.
+      // If parsing fails, keep raw text as diagnostic info.
     }
-    throw new Error(body?.message || body?.error || `LofyPay respondeu com HTTP ${response.status}.`);
+    const detail = body ? body : raw;
+    // Throw a descriptive error including HTTP status and provider response body (stringified) for logs.
+    const safeDetail = typeof detail === "string" ? detail : JSON.stringify(detail);
+    throw new Error(`LofyPay HTTP ${response.status} ${response.statusText} - ${safeDetail}`);
   }
 
   return (await response.json()) as T;
