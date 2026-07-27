@@ -259,16 +259,41 @@ async function processCallback(profile: TelegramProfile, chatId: number, data: s
 }
 
 export async function handleTelegramUpdate(update: TelegramUpdate) {
-  if (update.message?.from && update.message.text) {
-    await processMessage(update.message.from, update.message.chat.id, update.message.text);
-    return;
-  }
-  if (update.callback_query?.from && update.callback_query.data && update.callback_query.message) {
-    await processCallback(
-      update.callback_query.from,
-      update.callback_query.message.chat.id,
-      update.callback_query.data,
-      update.callback_query.id
-    );
+  try {
+    if (update.message?.from && update.message.text) {
+      await processMessage(update.message.from, update.message.chat.id, update.message.text);
+      return;
+    }
+    if (update.callback_query?.from && update.callback_query.data && update.callback_query.message) {
+      await processCallback(
+        update.callback_query.from,
+        update.callback_query.message.chat.id,
+        update.callback_query.data,
+        update.callback_query.id
+      );
+    }
+  } catch (error) {
+    console.error("handleTelegramUpdate failed", {
+      error: error instanceof Error ? { message: error.message, stack: error.stack } : String(error),
+      hasMessage: !!update.message,
+      hasCallback: !!update.callback_query,
+    });
+
+    // Attempt to acknowledge the callback so Telegram doesn't show a spinner
+    try {
+      if (update.callback_query?.id) await answerCallbackQuery(update.callback_query.id);
+    } catch (ackErr) {
+      console.error("failed to answer callback after error", { ackErr });
+    }
+
+    // Notify the user in-chat that an error occurred (non-sensitive)
+    try {
+      const chatId = update.message?.chat?.id ?? update.callback_query?.message?.chat?.id;
+      if (chatId) {
+        await sendMessage(chatId, "Desculpe — ocorreu um erro ao processar sua solicitação. Tente novamente em alguns instantes.");
+      }
+    } catch (sendErr) {
+      console.error("failed to send user error message after update failure", { sendErr });
+    }
   }
 }
