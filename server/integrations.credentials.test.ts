@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 const telegramToken = process.env.TELEGRAM_BOT_TOKEN;
-const evoPayApiKey = process.env.EVOPAY_API_KEY;
+const lofyPayApiKey = process.env.LOFYPAY_API_KEY;
 
 describe("credenciais das integrações", () => {
   it("autentica o bot no endpoint getMe do Telegram", async () => {
@@ -18,11 +18,11 @@ describe("credenciais das integrações", () => {
     expect(body.result?.id).toBeTypeOf("number");
   });
 
-  it("autentica a chave da EvoPay em uma consulta leve da conta", async () => {
-    expect(evoPayApiKey, "EVOPAY_API_KEY deve estar configurada").toBeTruthy();
+  it("autentica a chave da LofyPay em uma consulta leve da conta", async () => {
+    expect(lofyPayApiKey, "LOFYPAY_API_KEY deve estar configurada").toBeTruthy();
 
-    const response = await fetch("https://pix.evopay.cash/v1/account", {
-      headers: { "API-Key": evoPayApiKey ?? "" },
+    const response = await fetch("https://api.lofypay.com/v1/account", {
+      headers: { "API-Key": lofyPayApiKey ?? "" },
       signal: AbortSignal.timeout(10_000),
     });
     const body = await response.text();

@@ -5,7 +5,7 @@
 - [x] Implementar a experiência `/start` do bot com descrição do grupo, aviso de conteúdo adulto, prévia configurável e botão de compra.
 - [x] Implementar catálogo configurável de planos de assinatura com preço, duração e disponibilidade.
 - [x] Persistir perfis do Telegram, confirmações de maioridade, assinaturas, pagamentos, convites, eventos de acesso e logs de automação.
-- [x] Integrar a criação de cobrança PIX da EvoPay, incluindo QR Code, código copia e cola, expiração e estado de pagamento.
+- [x] Integrar a criação de cobrança PIX da LofyPay, incluindo QR Code, código copia e cola, expiração e estado de pagamento.
 - [x] Implementar endpoint de webhook da EvoPay com validação de assinatura, idempotência, auditoria e tratamento de tentativas repetidas.
 - [x] Implementar confirmação de pagamento, ativação de assinatura e geração de convite único, limitado no uso e com expiração.
 - [x] Implementar envio seguro do convite único ao assinante pelo bot do Telegram.

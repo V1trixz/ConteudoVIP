@@ -79,7 +79,7 @@ export const payments = mysqlTable(
     planId: varchar("planId", { length: 64 })
       .notNull()
       .references(() => subscriptionPlans.id),
-    provider: varchar("provider", { length: 32 }).default("evopay").notNull(),
+    provider: varchar("provider", { length: 32 }).default("lofypay").notNull(),
     providerTransactionId: varchar("providerTransactionId", { length: 128 }).unique(),
     externalReference: varchar("externalReference", { length: 128 }).notNull().unique(),
     callbackTokenHash: varchar("callbackTokenHash", { length: 128 }).notNull(),
