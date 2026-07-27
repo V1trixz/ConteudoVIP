@@ -157,6 +157,14 @@ async function createPaymentForPlan(telegramUserId: string, planId: string) {
       [[{ text: "Verificar pagamento", callback_data: `payment_check:${payment.id}` }]]
     );
   } catch (error) {
+    console.error("createPixCharge failed", { paymentId: payment.id, error: error instanceof Error ? { message: error.message, stack: error.stack } : String(error) });
+    // Inform the user that the purchase failed without exposing provider internals
+    try {
+      await sendMessage(telegramUser.telegramUserId, "Desculpe — não foi possível gerar a cobrança PIX no momento. Tente novamente em alguns instantes.");
+    } catch (sendErr) {
+      console.error("failed to send user error message", { sendErr });
+    }
+
     await db.setPaymentStatus(payment.id, "failed", {
       providerPayload: serializeSafe({ error: error instanceof Error ? error.message : String(error) }),
     });
