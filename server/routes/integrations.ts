@@ -31,7 +31,7 @@ function sendHandlerError(res: Response, error: unknown, context: Record<string,
   });
 }
 
-export async function evopayWebhook(req: Request, res: Response) {
+export async function lofypayWebhook(req: Request, res: Response) {
   const paymentId = typeof req.query.payment_id === "string" ? req.query.payment_id : "";
   const callbackToken = typeof req.query.token === "string" ? req.query.token : undefined;
   if (!paymentId || !callbackToken) return res.status(400).json({ error: "callback inválido" });
@@ -57,7 +57,7 @@ export async function evopayWebhook(req: Request, res: Response) {
       return res.status(409).json({ error: "transação divergente" });
     }
 
-    const result = await processEvoPayCompletion(payment.providerTransactionId);
+    const result = await processLofyPayCompletion(payment.providerTransactionId);
     if (!result.accepted) return res.status(202).json({ ok: true, pending: result.reason });
     return res.status(200).json({ ok: true, alreadyFulfilled: result.result.alreadyFulfilled });
   } catch (error) {
@@ -71,7 +71,7 @@ export async function evopayWebhook(req: Request, res: Response) {
         message: error instanceof Error ? error.message : "Falha desconhecida no webhook.",
       })
       .catch(() => undefined);
-    return sendHandlerError(res, error, { handler: "evopay" });
+    return sendHandlerError(res, error, { handler: "lofypay" });
   }
 }
 
@@ -120,7 +120,7 @@ async function subscriptionLifecycleHandler(req: Request, res: Response) {
 }
 
 export function registerSubscriptionIntegrationRoutes(app: Express) {
-  app.post("/api/webhooks/evopay", evopayWebhook);
+  app.post("/api/webhooks/lofypay", lofypayWebhook);
   app.post("/api/webhooks/telegram", telegramWebhook);
   app.post("/api/scheduled/subscription-lifecycle", subscriptionLifecycleHandler);
 }

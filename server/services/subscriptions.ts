@@ -1,5 +1,5 @@
 import * as db from "../db";
-import { getPixCharge, isCompletedDepositForPayment } from "./evopay";
+import { getPixCharge, isCompletedDepositForPayment } from "./lofypay";
 import { serializeSafe } from "./ids";
 import {
   createSingleUseInviteLink,
@@ -133,7 +133,7 @@ export async function fulfillCompletedPayment(paymentId: string, providerPayload
     telegramUserId: telegramUser.id,
     subscriptionId: subscription.id,
     eventType: "payment_confirmed",
-    detail: `Pagamento ${payment.id} confirmado pela EvoPay.`,
+    detail: `Pagamento ${payment.id} confirmado pela LofyPay.`,
   });
   await db.createAuditLog({
     category: "payment",
@@ -161,7 +161,7 @@ export async function fulfillCompletedPayment(paymentId: string, providerPayload
   return { subscription, alreadyFulfilled: false };
 }
 
-export async function processEvoPayCompletion(providerTransactionId: string) {
+export async function processLofyPayCompletion(providerTransactionId: string) {
   const payment = await db.getPaymentByProviderTransaction(providerTransactionId);
   if (!payment) return { accepted: false, reason: "Pagamento não associado." } as const;
 
